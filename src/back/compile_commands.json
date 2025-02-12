@@ -1,0 +1,49 @@
+[
+  {
+    "arguments": [
+      "/usr/local/bin/gcc",
+      "-std=c99",
+      "-D_POSIX_SOURCE",
+      "-g",
+      "-c",
+      "-o",
+      "parser.o",
+      "parser.c"
+    ],
+    "directory": "/home/jan/projects/git/MMenu/src/back",
+    "file": "/home/jan/projects/git/MMenu/src/back/parser.c",
+    "output": "/home/jan/projects/git/MMenu/src/back/parser.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/bin/gcc",
+      "-std=c99",
+      "-D_POSIX_SOURCE",
+      "-g",
+      "-c",
+      "-o",
+      "lexer.o",
+      "lexer.c"
+    ],
+    "directory": "/home/jan/projects/git/MMenu/src/back",
+    "file": "/home/jan/projects/git/MMenu/src/back/lexer.c",
+    "output": "/home/jan/projects/git/MMenu/src/back/lexer.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/bin/gcc",
+      "-c",
+      "-std=c99",
+      "-D_POSIX_SOURCE",
+      "-g",
+      "parser.a",
+      "--static",
+      "-o",
+      "main",
+      "main.c"
+    ],
+    "directory": "/home/jan/projects/git/MMenu/src/back",
+    "file": "/home/jan/projects/git/MMenu/src/back/main.c",
+    "output": "/home/jan/projects/git/MMenu/src/back/main"
+  }
+]
