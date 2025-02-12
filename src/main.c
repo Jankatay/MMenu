@@ -4,7 +4,7 @@
 
 int main() {
 	InitWindow(800, 400, "test");
-	SetTargetFPS(20);
+	SetTargetFPS(10);
 
 	bool showMessageBox = false;
 
