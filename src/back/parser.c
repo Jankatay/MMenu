@@ -72,6 +72,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "enums.h"
 int yylex(void);
 void yyerror(const char* msg);
 int xtoi(const char* targetNum);
@@ -82,15 +83,7 @@ int getOutput(const char* str);
 extern void startLexer(const char* target);
 extern void stopLexer();
 
-/* error status */
-enum ErrorStatus {
-	success,
-	errSyntax,
-	errOther
-};
-extern enum ErrorStatus errStatus;
-
-#line 94 "./parser.c"
+#line 87 "./parser.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -520,8 +513,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    34,    34,    35,    38,    39,    40,    43,    44,    45,
-      48,    49
+       0,    31,    31,    32,    35,    36,    37,    40,    41,    42,
+      45,    46
 };
 #endif
 
@@ -1088,43 +1081,43 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* calculation: calculation expression EOL  */
-#line 34 "./parser/parser.y"
+#line 31 "./parser/parser.y"
                                         { return yyvsp[-1]; }
-#line 1094 "./parser.c"
+#line 1087 "./parser.c"
     break;
 
   case 5: /* expression: expression ADD term  */
-#line 39 "./parser/parser.y"
+#line 36 "./parser/parser.y"
                                 { yyval = yyvsp[-2]+yyvsp[0]; }
-#line 1100 "./parser.c"
+#line 1093 "./parser.c"
     break;
 
   case 6: /* expression: expression SUB term  */
-#line 40 "./parser/parser.y"
+#line 37 "./parser/parser.y"
                                 { yyval = yyvsp[-2]-yyvsp[0]; }
-#line 1106 "./parser.c"
+#line 1099 "./parser.c"
     break;
 
   case 8: /* term: term MUL factor  */
-#line 44 "./parser/parser.y"
+#line 41 "./parser/parser.y"
                                 { yyval = yyvsp[-2]*yyvsp[0]; }
-#line 1112 "./parser.c"
+#line 1105 "./parser.c"
     break;
 
   case 9: /* term: term DIV factor  */
-#line 45 "./parser/parser.y"
+#line 42 "./parser/parser.y"
                                         { yyval = yyvsp[-2]/yyvsp[0]; }
-#line 1118 "./parser.c"
+#line 1111 "./parser.c"
     break;
 
   case 11: /* factor: OPENP expression CLOSEP  */
-#line 49 "./parser/parser.y"
+#line 46 "./parser/parser.y"
                           { yyval = yyvsp[-1]; }
-#line 1124 "./parser.c"
+#line 1117 "./parser.c"
     break;
 
 
-#line 1128 "./parser.c"
+#line 1121 "./parser.c"
 
       default: break;
     }
@@ -1317,7 +1310,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 51 "./parser/parser.y"
+#line 48 "./parser/parser.y"
 
 
 #define BUFSIZE 255
@@ -1356,4 +1349,3 @@ int btoi(const char* targetNum) {
 
 	return strtol(buf, NULL, 2);
 }
-

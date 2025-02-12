@@ -6,6 +6,8 @@ all: lib
 	@(echo; echo "Done making the static library parser.a")
 	@(echo "Usage : use int getOutput(const char*) to interact with the library")
 	@(echo "attach --static -lfl at the end of your compiler flags")
+	@(echo "Use parser.a when compiling. Also include enums.h for error checking")
+	@(echo "example compiling")
 	make main
 
 main: main.c lib

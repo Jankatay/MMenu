@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "enums.h"
 int yylex(void);
 void yyerror(const char* msg);
 int xtoi(const char* targetNum);
@@ -12,14 +13,6 @@ int getOutput(const char* str);
 /* lexer functions */
 extern void startLexer(const char* target);
 extern void stopLexer();
-
-/* error status */
-enum ErrorStatus {
-	success,
-	errSyntax,
-	errOther
-};
-extern enum ErrorStatus errStatus;
 %}
 
 /* tokens */
@@ -28,6 +21,10 @@ extern enum ErrorStatus errStatus;
 %token OPENP CLOSEP
 %token EOL
 
+%code requires {
+	extern int getOutput(const char* str);
+	extern enum ErrorStatus getLexerStatus();
+}
 
 /* BNF Grammer, modified version of the example from o'reilly flex and bison book */
 %%
@@ -86,4 +83,3 @@ int btoi(const char* targetNum) {
 
 	return strtol(buf, NULL, 2);
 }
-

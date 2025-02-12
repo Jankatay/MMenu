@@ -44,6 +44,13 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 24 "./parser/parser.y"
+
+	extern int getOutput(const char* str);
+	extern enum ErrorStatus getLexerStatus();
+
+#line 54 "./parser.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -78,7 +85,6 @@ extern YYSTYPE yylval;
 
 
 int yyparse (void);
-extern int getOutput(const char*);
 
 
 #endif /* !YY_YY_PARSER_H_INCLUDED  */

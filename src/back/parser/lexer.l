@@ -2,14 +2,9 @@
 %{
 /* Tokens and functions are declared in parser.y */
 #include "parser.h"
+#include "enums.h"
 extern int btoi(const char*);
 extern int xtoi(const char*);
-/* error status */
-enum ErrorStatus {
-	success,
-	errSyntax,
-	errOther
-};
 enum ErrorStatus errStatus;
 %}
 
@@ -20,7 +15,8 @@ enum ErrorStatus errStatus;
 "*" 			{ return MUL; }
 "/" 			{ return DIV; } 
 "(" 			{ return OPENP; } 
-"(" 			{ return CLOSEP; } 
+")" 			{ return CLOSEP; } 
+[a-zA-Z]  { yylval=yytext[0]; }
 [0-9]+ 		{ yylval=atoi(yytext); return NUM; } /* atoi from stdlib   */
 0x[0-9a-zA-Z]+ 	{ yylval=xtoi(yytext); return NUM; } /* xtoi from parser.y */
 0b[01]+ 	{ yylval=btoi(yytext); return NUM; } /* btoi from parser.y */
