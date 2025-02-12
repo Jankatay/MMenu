@@ -19,6 +19,8 @@ enum ErrorStatus errStatus;
 "-" 			{ return SUB; }
 "*" 			{ return MUL; }
 "/" 			{ return DIV; } 
+"(" 			{ return OPENP; } 
+"(" 			{ return CLOSEP; } 
 [0-9]+ 		{ yylval=atoi(yytext); return NUM; } /* atoi from stdlib   */
 0x[0-9a-zA-Z]+ 	{ yylval=xtoi(yytext); return NUM; } /* xtoi from parser.y */
 0b[01]+ 	{ yylval=btoi(yytext); return NUM; } /* btoi from parser.y */
