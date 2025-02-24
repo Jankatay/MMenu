@@ -1,13 +1,24 @@
 #include "mmenu.h"
 
+int replaceAsmWithCode(char* as) {
+	char res[255] = "0x";
+	char out[255] = "";
+	as[strlen(as)-1] = '\0';
+	asmToCode(as+1, out);
+	strcpy(as, out);
+	return strlen(out);
+}
+
 int main(int argc, char* argv[]) {
+	char try[255] = "5/1.5";
+	char out[255] = "";
+
 	initMMenu();
-	char res[32][64];
-	const uint8_t nops[5] = {233, 135, 0, 0, 0};
-	int len = codeToAsm(nops, res);
-	for(int i = 0; i < len; i++) {
-		printf("%s\n", res[i]);
-	}
+
+	regplace(try, "\".*\"", replaceAsmWithCode, out);
+	printf("%s\n=\t%s\n", out, solve(out));
+
+
 	freeMMenu();
 	return 0;
 }
