@@ -1,30 +1,13 @@
-#include "parser.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-/* error status */
-enum ErrorStatus {
-	success,
-	errSyntax,
-	errOther
-};
-extern enum ErrorStatus errStatus;
-extern enum ErrorStatus getLexerStatus();
-extern int getOutput(const char*);
+#include "mmenu.h"
 
 int main(int argc, char* argv[]) {
-	if(argc != 2) {
-		fprintf(stderr, "Usage: ./main <calculation string in quotes>\n", stderr);
-		exit(EXIT_FAILURE);
+	initMMenu();
+	char res[32][64];
+	const uint8_t nops[5] = {233, 135, 0, 0, 0};
+	int len = codeToAsm(nops, res);
+	for(int i = 0; i < len; i++) {
+		printf("%s\n", res[i]);
 	}
-
-	int res = getOutput(argv[1]);
-	if(getLexerStatus() != success) {
-		fprintf(stderr, "Syntax error\n");
-		exit(EXIT_FAILURE);
-	}
-
-	printf("%d\n", res);
+	freeMMenu();
 	return 0;
 }
