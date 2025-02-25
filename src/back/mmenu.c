@@ -249,11 +249,11 @@ int removeMatches(char* e) {
 
 // regex.
 static char *validList[] = {
-	"[0-9]\\+", 					// decimal
 	"0x[0-9a-fA-F]\\+", 	// hex
 	"0b[01]\\+", 					// binary
 	"0o[0-7]\\+", 				// octal 
 	"[-+*/^|()=]\\+", 			// operators
+	"[0-9]\\+", 					// decimal
 	"[ \t\n]\\+", 					// whitespace
 	"x\\+", 								// algebra
 };
@@ -306,4 +306,43 @@ int sotoi(char *oct) {
 	if(mstatus) { return -1; }
 	mstatus = ERR_OK;
 	return status;
+}
+
+int getFinalOutput(char *equ) {
+	// convert all assembly
+	char out[255] = "", copy[255] = "";
+	strcpy(copy, equ);
+	int statusErr;
+	statusErr = regplace(copy, "\"[^\"]*\"", replaceAsmWithCode, out);
+	if(statusErr) {
+		mstatus = ERR_CONVERSION;
+		return 0;
+	}
+	
+	// check validity
+	int valError = valid(out);
+	if(valError) {
+		mstatus = ERR_SYNTAX;
+		return 0;
+	}
+
+	// solve 
+	char *sol = solve(out);
+	if(!sol) {
+		mstatus = ERR_OTHER;
+		return 0;
+	}
+	// return result
+	int res = atoi(sol);
+	free(sol);
+	return res;
+}
+
+int replaceAsmWithCode(char* as) {
+	char res[255] = "0x";
+	char out[255] = "";
+	as[strlen(as)-1] = '\0';
+	asmToCode(as+1, out);
+	strcpy(as, out);
+	return strlen(out);
 }

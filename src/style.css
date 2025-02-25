@@ -1,0 +1,13 @@
+@import "./catppuccin.css";
+
+window {
+	background-color: var(--ctp-mocha-base);
+}
+
+text, label {
+	color: var(--ctp-mocha-text);
+}
+
+entry {
+	background-color: var(--ctp-mocha-crust);
+}
