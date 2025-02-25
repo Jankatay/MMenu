@@ -10,9 +10,12 @@ using namespace std;
 extern "C" char* solve(char* equation) {
 	new Calculator();
 	char *res = (char*)malloc(255);
-	string str = string(equation);
-	string calculation = CALCULATOR->calculateAndPrint(str);
-	strcpy(res, calculation.c_str());
+	MathStructure mstruct = CALCULATOR->calculate(equation);
+	if(mstruct.isNumber()) {
+		sprintf(res, "%d", mstruct.number().intValue());
+	} else {
+		strcpy(res, mstruct.eval().print().c_str());
+	}
 	return res;
 }
 

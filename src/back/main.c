@@ -10,15 +10,7 @@ int replaceAsmWithCode(char* as) {
 }
 
 int main(int argc, char* argv[]) {
-	char try[255] = "5/1.5";
-	char out[255] = "";
-
-	initMMenu();
-
-	regplace(try, "\".*\"", replaceAsmWithCode, out);
-	printf("%s\n=\t%s\n", out, solve(out));
-
-
+	printf("%s\n", solve("5x=555"));
 	freeMMenu();
 	return 0;
 }
