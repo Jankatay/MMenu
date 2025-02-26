@@ -3,9 +3,11 @@
 int main(int argc, char* argv[]) {
 	initMMenu();
 
-	char *question = "9999999999999991+9";
-	char *buf = solve(question);
-	printf("%s\n", buf);
+	mpf_t res;
+	mpf_init(res);
+	getFinalOutput("0xFFFFFFFFFFFFFFFFFF*12x=4722366482869645213695", res);
+	gmp_printf("%Ff\n", res);
+	mpf_clear(res);
 
 	freeMMenu();
 	return 0;
