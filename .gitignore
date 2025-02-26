@@ -3,8 +3,8 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-.ccls_cache
-/.ccls_cache
+.ccls-cache
+/.ccls-cache
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
