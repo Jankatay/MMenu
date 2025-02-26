@@ -1,9 +1,10 @@
 #include <gtk/gtk.h>
 #include "./back/mmenu.h"
-#include <ctype.h>
 
 void initLabel(GtkWidget *label);
 void bufHandler(GtkWidget *widget, gpointer data);
+char asmBuf[32][64] = {""};
+mpf_t res;
 
 // user input 
 GtkEntryBuffer *gbuff; // result buffer
@@ -45,11 +46,12 @@ void static activate(GtkApplication *app, gpointer data) {
 	/* labels */
 	// Text output. 
 	labelHex = gtk_label_new("0x0"); 
-	labelAsm = gtk_label_new("0"); 
+	labelAsm = gtk_label_new(""); 
 	labelBin = gtk_label_new("0b0"); 
-	labelDec = gtk_label_new("0"); 
+	labelDec = gtk_label_new("0.0"); 
 	labelOct = gtk_label_new("0o0"); 
-	labelAscii = gtk_label_new("0"); 
+	labelAscii = gtk_label_new(""); 
+	gtk_widget_set_visible(labelAscii, false);
 	gtk_widget_set_name(labelHex, "labelHex");
 	gtk_widget_set_name(labelAsm, "labelHex");
 	initLabel(labelHex);
@@ -66,6 +68,7 @@ void static activate(GtkApplication *app, gpointer data) {
 	gtk_entry_set_buffer(GTK_ENTRY(entry), gbuff);
 	PangoAttrList *list = pango_attr_list_new();
 	gtk_widget_set_size_request(entry, 500, 50);
+	gtk_entry_set_max_length(GTK_ENTRY(entry), 50);
 	PangoAttribute *attr = pango_attr_size_new(36*PANGO_SCALE);
 	pango_attr_list_insert(list, attr);
 	gtk_entry_set_attributes(GTK_ENTRY(entry), list);
@@ -93,6 +96,7 @@ void static activate(GtkApplication *app, gpointer data) {
 
 int main(int argc, char *argv[]) {
 	initMMenu();
+	mpf_init_set_d(res, 0);
 	// run the app and return status.
 	GtkApplication *app = gtk_application_new("org.MMenu", G_APPLICATION_DEFAULT_FLAGS);
 	g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
@@ -111,7 +115,7 @@ void initLabel(GtkWidget *label){
 	gtk_label_set_single_line_mode(GTK_LABEL(label), true);
 	gtk_label_set_selectable(GTK_LABEL(label), true);
 	gtk_label_set_attributes(GTK_LABEL(label), list);
-	gtk_label_set_max_width_chars(GTK_LABEL(label), 21);
+	gtk_label_set_max_width_chars(GTK_LABEL(label), 10);
 	// clean
 	pango_attr_list_unref(list);
 }
@@ -123,24 +127,32 @@ void bufHandler(GtkWidget *widget, gpointer data) {
 		return;
 	}
 
-	// solve
-	float res = getFinalOutput( out );
-	if(mstatus || res == -1) {
-		res = 0;
+	/* solve */
+	bool status = getFinalOutput( out, res );
+	if(mstatus || !status) {
+		mpf_set_d(res, 0);
 	} 
-	snprintf(out, 255, "%.2f", res);
+	gmp_snprintf(out, 255, "%.2Ff", res);
 
-	// fill
+	/* fill */
 	gtk_label_set_text(GTK_LABEL(labelDec), out);
-	gtk_label_set_text(GTK_LABEL(labelHex), itox(res));
-	gtk_label_set_text(GTK_LABEL(labelBin), itob(res));
-	gtk_label_set_text(GTK_LABEL(labelOct), itoo(res));
-
-	if((res > 'a' && res < 'z') || (res > 'A' && res < 'Z')) {
-		char temp[2] = {res, '\0'};
-		gtk_label_set_text(GTK_LABEL(labelAscii), temp);
-		gtk_widget_set_visible(labelAscii, true);
+	mtox(res, out);
+	gtk_label_set_text(GTK_LABEL(labelHex), out);
+	//mtob(res, out);
+	gtk_label_set_text(GTK_LABEL(labelBin), out);
+	//mtoo(res, out);
+	gtk_label_set_text(GTK_LABEL(labelOct), out);
+	//isalpha overflows easy and out is float.
+	int len = charCodeToAsm(out, asmBuf);
+	if(len == -1) {
+		gtk_label_set_text(GTK_LABEL(labelAsm), "");
+		mstatus = ERR_OK;
 	} else {
-		gtk_widget_set_visible(labelAscii, false);
+		out[0] = '\0';
+		for(int i = 0; i < len; i++) {
+			strncat(out, asmBuf[i], 64);
+			strcat(out, "; ");
+		}
+		gtk_label_set_text(GTK_LABEL(labelAsm), out);
 	}
 }

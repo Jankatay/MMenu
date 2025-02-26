@@ -2,6 +2,7 @@
 #define WRAPPER_H
 
 #include <libqalculate/qalculate.h>
+#include <gmp.h>
 #include <cstring>
 #include <string>
 #include <iostream>

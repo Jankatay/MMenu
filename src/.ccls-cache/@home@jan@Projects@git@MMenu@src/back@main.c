@@ -2,8 +2,11 @@
 
 int main(int argc, char* argv[]) {
 	initMMenu();
-	float res = getFinalOutput("5+5.5");
-	printf("%f\n", res);
+
+	char *question = "9999999999999991+9";
+	char *buf = solve(question);
+	printf("%s\n", buf);
+
 	freeMMenu();
 	return 0;
 }

@@ -3,7 +3,7 @@ LDGTK = `pkg-config --libs gtk4`
 INGTK = `pkg-config --cflags gtk4`
 LDCAP = `pkg-config --libs capstone`
 LDKEY = `pkg-config --libs keystone`
-LDQAL = -lqalculate
+LDQAL = -lqalculate -lgmp
 LDFLAGS = -lstdc++ -lm
 
 run: main

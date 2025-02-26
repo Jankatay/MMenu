@@ -1,5 +1,5 @@
 CC = gcc -g
-LDFLAGS = -l:libcapstone.a -l:libkeystone.a -l:libstdc++.a -lqalculate -l:libstdc++.a -l:libm.a 
+LDFLAGS = -l:libcapstone.a -l:libkeystone.a -l:libstdc++.a -lqalculate -l:libstdc++.a -l:libm.a -lgmp
 
 run: main
 	./main
