@@ -13,13 +13,15 @@ extern "C" char* solve(char* equation) {
 	char *res = (char*)malloc(255);
 	new Calculator(); 
 	MathStructure temp, mstruct = CALCULATOR->calculate(equation);
+	PrintOptions op;
+	op.min_exp = 30;
 	// calculate 
 	if( mstruct.isNumber() ) {
-		strcpy(res, mstruct.print().c_str());
+		strcpy(res, mstruct.print(op).c_str());
 	} else if ( !mstruct.countChildren() ) {
 		res = NULL;
 	} else if ( mstruct.last().isNumber() ){
-		strcpy(res, mstruct.last().print().c_str());
+		strcpy(res, mstruct.last().print(op).c_str());
 	} else {
 		res = NULL;
 	}
