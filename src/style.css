@@ -1,14 +1,12 @@
-@import "./catppuccin.css";
+/* catppuccin colors */
 
 window {
 	background-color: #1e1e2e;
 
 }
-
 text, label {
 	color: #cdd6f4;
 }
-
 entry {
 	background-color: #11111b;
 }
