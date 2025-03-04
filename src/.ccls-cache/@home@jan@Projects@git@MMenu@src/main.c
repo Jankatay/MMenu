@@ -4,6 +4,7 @@
 void initLabel(GtkWidget *label);
 void bufHandler(GtkWidget *widget, gpointer data);
 char asmBuf[32][64] = {""};
+char asmOut[32*64] = "";
 mpf_t res;
 
 // user input 
@@ -130,29 +131,31 @@ void bufHandler(GtkWidget *widget, gpointer data) {
 	/* solve */
 	bool status = getFinalOutput( out, res );
 	if(mstatus || !status) {
+		mstatus = ERR_OK;
 		mpf_set_d(res, 0);
 	} 
 	gmp_snprintf(out, 255, "%.2Ff", res);
 
 	/* fill */
+
+	// decimal
 	gtk_label_set_text(GTK_LABEL(labelDec), out);
+	// binary
+	mtob(res, out);
+	gtk_label_set_text(GTK_LABEL(labelBin), out);
+	// octal
+	mtoo(res, out);
+	gtk_label_set_text(GTK_LABEL(labelOct), out);
+	// hex 
 	mtox(res, out);
 	gtk_label_set_text(GTK_LABEL(labelHex), out);
-	//mtob(res, out);
-	gtk_label_set_text(GTK_LABEL(labelBin), out);
-	//mtoo(res, out);
-	gtk_label_set_text(GTK_LABEL(labelOct), out);
-	//isalpha overflows easy and out is float.
+	// asm
 	int len = charCodeToAsm(out, asmBuf);
-	if(len == -1) {
-		gtk_label_set_text(GTK_LABEL(labelAsm), "");
-		mstatus = ERR_OK;
-	} else {
-		out[0] = '\0';
-		for(int i = 0; i < len; i++) {
-			strncat(out, asmBuf[i], 64);
-			strcat(out, "; ");
-		}
-		gtk_label_set_text(GTK_LABEL(labelAsm), out);
+	asmOut[0] = '\0';
+	for(int i = 0; i < len; i++) {
+		strcat(asmOut, asmBuf[i]);
+		strcat(asmOut, "; ");
 	}
+	gtk_label_set_text(GTK_LABEL(labelAsm), asmOut);
+	if(mstatus) { mstatus = ERR_OK; }
 }

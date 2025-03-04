@@ -378,7 +378,7 @@ int charCodeToAsm(char *ubuf, char cbuf[32][64]) {
 	uint8_t bytes[255] = {};
 	char temp[2];
 	int len = 0;
-	for(int i = 2; i < strlen(ubuf)-1; i+=2) {
+	for(int i = 0; i < strlen(ubuf); i+=2) {
 		strncpy(temp, ubuf+i, 2);
 		bytes[len++] = xtoi(temp);
 	}
@@ -422,13 +422,16 @@ bool mtox(mpf_t frac, char *dst) {
 
 	// calculate
 	mp_exp_t expptr;
-	char *buf = mpf_get_str(NULL, &expptr, 16, 50, frac);
+	char buf[255];
+	mpf_get_str(buf, &expptr, 16, 255, frac);
 
-	// return
-	int res = strlen(buf)+1;
-	strcpy(dst, buf);
-	freem(buf, res);
-	return res >= 0;
+	// append expptr
+	char *end = stpcpy(dst, buf);
+	while( end - dst < expptr) {
+		*end++ = '0';
+	}
+	*end = '\0';
+	return dst[0];
 }
 
 bool mtob(mpf_t frac, char *dst) {
@@ -437,13 +440,16 @@ bool mtob(mpf_t frac, char *dst) {
 
 	// calculate
 	mp_exp_t expptr;
-	char *buf = mpf_get_str(NULL, &expptr, 2, 50, frac);
+	char buf[255];
+	mpf_get_str(buf, &expptr, 2, 255, frac);
 
-	// return
-	int res = strlen(buf)+1;
-	strcpy(dst, buf);
-	freem(buf, res);
-	return res >= 0;
+	// append expptr
+	char *end = stpcpy(dst, buf);
+	while( end - dst < expptr) {
+		*end++ = '0';
+	}
+	*end = '\0';
+	return dst[0];
 }
 
 bool mtoo(mpf_t frac, char *dst) {
@@ -452,11 +458,16 @@ bool mtoo(mpf_t frac, char *dst) {
 
 	// calculate
 	mp_exp_t expptr;
-	char *buf = mpf_get_str(NULL, &expptr, 8, 50, frac);
-	
-	// return
-	int res = strlen(buf)+1;
-	strcpy(dst, buf);
-	freem(buf, res);
-	return res >= 0;
+	char buf[255];
+	mpf_get_str(buf, &expptr, 8, 255, frac);
+
+	// append expptr
+	char *end = stpcpy(dst, buf);
+	while( end - dst < expptr) {
+		*end++ = '0';
+	}
+	*end = '\0';
+	return dst[0];
 }
+
+
