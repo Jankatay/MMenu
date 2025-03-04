@@ -1,14 +1,15 @@
 @import "./catppuccin.css";
 
 window {
-	background-color: var(--ctp-mocha-base);
+	background-color: #1e1e2e;
+
 }
 
 text, label {
-	color: var(--ctp-mocha-text);
+	color: #cdd6f4;
 }
 
 entry {
-	background-color: var(--ctp-mocha-crust);
+	background-color: #11111b;
 }
 
