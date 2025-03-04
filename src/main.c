@@ -7,6 +7,20 @@ char asmBuf[32][64] = {""};
 char asmOut[32*64] = "";
 mpf_t res;
 
+
+/* catppuccin colors */
+const char *colors = ""
+"window {"
+	"background-color: #1e1e2e;"
+"}"
+"text, label {"
+"	color: #cdd6f4;"
+"}"
+"entry {"
+"	background-color: #11111b;"
+"}"
+"";
+
 // user input 
 GtkEntryBuffer *gbuff; // result buffer
 GtkWidget *labelHex, *labelOct, *labelDec, *labelBin, *labelAscii, *labelAsm;
@@ -23,7 +37,8 @@ void static activate(GtkApplication *app, gpointer data) {
 	/* color */
 	GtkCssProvider *provider = gtk_css_provider_new();
 	GdkDisplay *display = gdk_display_get_default();
-	gtk_css_provider_load_from_path(provider, "./style.css");
+	//gtk_css_provider_load_from_path(provider, "./style.css");
+	gtk_css_provider_load_from_string(provider, colors);
 	gtk_style_context_add_provider_for_display(display, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 
