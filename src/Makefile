@@ -10,7 +10,7 @@ run: main
 	./main
 
 main: main.c ./back/mmenu.c ./back/wrapper.cpp 
-	$(CC) $(INGTK) -o main main.c ./back/mmenu.c ./back/wrapper.cpp $(LDGTK) $(LDCAP) $(LDKEY) $(LDQAL) $(LDFLAGS)
+	$(CC) $(INGTK) -o main main.c shortcut-handler.c ./back/mmenu.c ./back/wrapper.cpp $(LDGTK) $(LDCAP) $(LDKEY) $(LDQAL) $(LDFLAGS)
 
 .PHONY: clean
 clean:

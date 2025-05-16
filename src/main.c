@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include "shortcut-handler.h"
 #include "./back/mmenu.h"
 
 void initLabel(GtkWidget *label);
@@ -6,7 +7,6 @@ void bufHandler(GtkWidget *widget, gpointer data);
 char asmBuf[32][64] = {""};
 char asmOut[32*64] = "";
 mpf_t res;
-
 
 /* catppuccin colors */
 const char *colors = ""
@@ -26,10 +26,16 @@ GtkEntryBuffer *gbuff; // result buffer
 GtkWidget *labelHex, *labelOct, *labelDec, *labelBin, *labelAscii, *labelAsm;
 char out[255]; 
 
+gboolean printmsg(GtkWidget *widget, GVariant *args, gpointer user_data) {
+	printf("hello, world");
+	exit(EXIT_SUCCESS);
+}
+
 void static activate(GtkApplication *app, gpointer data) {
 	/* init widgets */
 	// set to NULL for now
-	GtkWidget *window, *entry, *layoutUpper, *layoutLower;
+	ExampleAppWindow *window;
+	GtkWidget *entry, *layoutUpper, *layoutLower;
 	labelHex = labelOct = labelDec = labelBin = labelAscii = labelAsm = NULL;
 	gbuff = gtk_entry_buffer_new("", 0);
 
@@ -43,11 +49,22 @@ void static activate(GtkApplication *app, gpointer data) {
 
 
 	/* window */
-	// The main window program runs at
-	window = gtk_application_window_new(app);
+	/*window = gtk_application_window_new(app);
 	gtk_window_set_title(GTK_WINDOW(window), "MMenu");
 	gtk_window_set_default_size(GTK_WINDOW(window), 600, 250);
-
+*/
+	window = example_app_window_new(app);
+	gtk_window_set_default_size(GTK_WINDOW(window), 600, 250);
+	gtk_window_set_title(GTK_WINDOW(window), "MMenu");
+	/* shortcut */
+	/*
+	GtkEventController *controller = gtk_shortcut_controller_new();
+	gtk_widget_add_controller(window, controller);
+	GtkShortcutAction *action = gtk_callback_action_new(printmsg, NULL, NULL);
+	GtkShortcutTrigger *trigger = gtk_shortcut_trigger_parse_string("<Alt>c");
+	GtkShortcut *shortcut = gtk_shortcut_new(trigger, action);
+	gtk_shortcut_controller_add_shortcut(GTK_SHORTCUT_CONTROLLER(controller), shortcut);
+	*/
 
 	/* layout */
 	// Where buttons are on the screen.
@@ -111,10 +128,16 @@ void static activate(GtkApplication *app, gpointer data) {
 }
 
 int main(int argc, char *argv[]) {
+	// init 
 	initMMenu();
 	mpf_init_set_d(res, 0);
-	// run the app and return status.
 	GtkApplication *app = gtk_application_new("org.MMenu", G_APPLICATION_DEFAULT_FLAGS);
+
+	// set shortcut
+	const char *accels[] = {"<Alt>c", NULL};
+	gtk_application_set_accels_for_action(app, "window.printmsg", accels);
+
+	// run the app and return status.
 	g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
 	int status = g_application_run(G_APPLICATION(app), argc, argv);
 	freeMMenu();
@@ -143,7 +166,7 @@ void bufHandler(GtkWidget *widget, gpointer data) {
 		return;
 	}
 
-	/* solve */
+	// solve 
 	bool status = getFinalOutput( out, res );
 	if(mstatus || !status) {
 		mstatus = ERR_OK;
@@ -151,6 +174,7 @@ void bufHandler(GtkWidget *widget, gpointer data) {
 	} 
 	gmp_snprintf(out, 255, "%.2Ff", res);
 
+	
 	/* fill */
 
 	// decimal
